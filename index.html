@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Independence Day — Pakistan</title>
+  <meta name="description" content="A premium, magazine‑cover Independence Day page with realistic flag textures, dramatic lighting, fireworks, confetti, and anthem playback." />
+  <link rel="preload" as="audio" href="assets/qaumi-tarana.mp3">
+  <style>
+    :root{
+      --green:#0a7a3a;
+      --green-deep:#075f2e;
+      --white:#ffffff;
+      --gold:#ffd166;
+      --glow:#9fffd2;
+      --bg:#02130a;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 50% 30%, #08381e 0%, #041b0f 50%, var(--bg) 100%);
+      color:var(--white);
+      overflow:hidden;
+    }
+
+    /* Layering */
+    .layer{position:fixed; inset:0; pointer-events:none}
+    #fireworks, #confetti{position:fixed; inset:0; z-index:0}
+
+    /* Subtle patriotic pattern (crescent & star) */
+    .pattern{z-index:1; opacity:.06; background-image:
+      radial-gradient(circle at 20px 20px, rgba(255,255,255,.12) 0 2px, transparent 3px),
+      radial-gradient(circle at 50px 60px, rgba(255,255,255,.09) 0 1.5px, transparent 2px);
+      background-size: 120px 120px, 140px 140px;
+      mix-blend-mode: screen;
+    }
+
+    /* Light flares */
+    .flares{z-index:2;}
+    .flare{position:absolute; width:700px; height:700px; border-radius:50%; filter:blur(80px);
+      background:radial-gradient(circle, rgba(159,255,210,.35), transparent 60%);
+      animation: float 14s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    .flare.f1{top:-120px; left:-120px;}
+    .flare.f2{bottom:-160px; right:-180px; animation-delay: -7s}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+    /* Hero content */
+    .hero{
+      position:relative; z-index:3; height:100%; display:grid; place-items:center; text-align:center; padding:24px;
+    }
+    .frame{
+      position:relative; width:min(1100px, 92vw); aspect-ratio: 16/9; border-radius:28px;
+      background: linear-gradient(145deg, rgba(10,122,58,.35), rgba(0,0,0,.35));
+      box-shadow:
+        0 50px 100px rgba(0,0,0,.5),
+        inset 0 0 0 1px rgba(255,255,255,.12),
+        inset 0 30px 50px rgba(255,255,255,.05),
+        inset 0 -30px 60px rgba(0,0,0,.35);
+      overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    /* Subtle fabric weave overlay */
+    .weave:before{
+      content:""; position:absolute; inset:0; pointer-events:none; mix-blend-mode:overlay; opacity:.2;
+      background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 1px, transparent 1px 2px),
+                        repeating-linear-gradient(90deg, rgba(0,0,0,.05) 0 1px, transparent 1px 2px);
+    }
+
+    /* Symmetric flag wings */
+    .flag{
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:min(30vw, 440px); height:min(45vh, 520px);
+      background-size:cover; background-position:center; border-radius:18px;
+      filter: contrast(1.05) saturate(1.1);
+      box-shadow: 0 30px 80px rgba(0,0,0,.45);
+      overflow:hidden;
+    }
+    .flag:after{ /* folds */
+      content:""; position:absolute; inset:0; background:
+        radial-gradient(120% 50% at 50% 0%, rgba(255,255,255,.18), transparent 45%),
+        radial-gradient(120% 50% at 50% 100%, rgba(0,0,0,.35), transparent 45%),
+        linear-gradient( to right, rgba(255,255,255,.05), transparent 30%, transparent 70%, rgba(255,255,255,.05));
+      mix-blend-mode:multiply;
+    }
+    .flag.left{left:-4%; transform: translateY(-50%) perspective(1200px) rotateY(14deg) rotateZ(-1.5deg);}
+    .flag.right{right:-4%; transform: translateY(-50%) perspective(1200px) rotateY(-14deg) rotateZ(1.5deg);}
+
+    /* Replace these URLs with free images you download to ./assets/ */
+    .flag.left{ background-image:url('assets/pak-flag-textured.jpg'); }
+    .flag.right{ background-image:url('assets/ajk-flag-textured.jpg'); }
+
+    /* Center crest */
+    .crest{
+      position:relative; width:min(42vw, 520px); aspect-ratio:1/1; border-radius:50%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.18), transparent 45%),
+                  linear-gradient(145deg, rgba(255,255,255,.18), rgba(255,255,255,0) 50%),
+                  radial-gradient(70% 70% at 60% 60%, rgba(159,255,210,.2), transparent 60%),
+                  linear-gradient(135deg, rgba(10,122,58,.65), rgba(4,27,15,.85));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -4px 12px rgba(0,0,0,.35), 0 40px 80px rgba(0,0,0,.55);
+      border:1px solid rgba(87, 39, 39, 0.22);
+    }
+    .crest:before{ /* soft inner glow ring */
+      content:""; position:absolute; inset:2.6%; border-radius:50%;
+      border:1px solid rgba(255,255,255,.25); box-shadow: inset 0 0 40px rgba(159,255,210,.28);
+    }
+
+    .heading{
+      position:absolute; left:50%; top:7%; transform:translateX(-50%);
+      display:flex; gap:12px; align-items:center; white-space:nowrap;
+    }
+    .title{
+      font-weight:800; letter-spacing:.02em; text-transform:uppercase;
+      font-size: clamp(22px, 2.2vw, 30px);
+      padding:.35rem .75rem; border-radius:999px;
+      background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 10px 20px rgba(0,0,0,.35);
+    }
+
+    .multi{
+      position:absolute; bottom:10%; left:50%; transform:translateX(-50%);
+      width:min(80%, 780px); height:auto;
+      font-weight:800; line-height:1.15; letter-spacing:.01em;
+      text-shadow: 0 6px 16px rgba(0,0,0,.55), 0 0 24px rgba(159,255,210,.25);
+    }
+    .multi .line{ display:block; opacity:0; transform:translateY(12px) scale(.98); filter:blur(6px); font-size:clamp(28px, 5vw, 68px)}
+
+    .sub{
+      position:absolute; bottom:6%; left:50%; transform:translateX(-50%);
+      opacity:.9; font-size: clamp(12px, 1.4vw, 16px); letter-spacing:.08em; text-transform:uppercase; font-size: 30px;
+    }
+
+    /* Glow particles */
+    .sparks{ position:absolute; inset:0; pointer-events:none; }
+    .spark{ position:absolute; width:3px; height:3px; border-radius:50%; background:var(--glow); filter:blur(.5px); opacity:.7; animation: rise 6s linear infinite; }
+    @keyframes rise{from{transform:translateY(10px); opacity:.2} to{transform:translateY(-100vh); opacity:.9}}
+
+    /* Start overlay (for audio autoplay policies) */
+    .start{
+      position:fixed; inset:0; z-index:10; display:grid; place-items:center; padding:20px; background:rgba(0,0,0,.6);
+      backdrop-filter: blur(6px); transition: opacity .5s ease; 
+    }
+    .start.hidden{opacity:0; pointer-events:none}
+    .start .card{
+      width:min(520px, 92vw); border-radius:22px; padding:28px; text-align:center;
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.25); box-shadow: 0 30px 80px rgba(0,0,0,.6);
+    }
+    .btn{
+      appearance:none; border:0; cursor:pointer; margin-top:16px; font-weight:700; letter-spacing:.04em;
+      padding:14px 22px; border-radius:999px; color:#09361c; background:linear-gradient(180deg, #b9ffd8, #7fffc0);
+      box-shadow: 0 12px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.8);
+    }
+    .btn:active{transform:translateY(1px)}
+
+    /* Mobile fine‑tuning */
+    @media (max-width: 720px){
+      .flag{display:none}
+      .crest{width:min(72vw, 460px)}
+      .multi{bottom:8%}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fireworks + Confetti canvases -->
+  <canvas id="fireworks" class="layer" aria-hidden="true"></canvas>
+  <canvas id="confetti" class="layer" aria-hidden="true"></canvas>
+
+  <!-- Subtle background pattern + light flares -->
+  <div class="layer pattern weave"></div>
+  <div class="layer flares">
+    <div class="flare f1"></div>
+    <div class="flare f2"></div>
+  </div>
+
+  <!-- Glow particles -->
+  <div class="layer sparks" id="sparks"></div>
+
+  <!-- Main content -->
+  <main class="hero">
+    <section class="frame weave" role="region" aria-label="Independence Day showcase">
+      <div class="flag left" role="img" aria-label="Flag left"></div>
+      <div class="flag right" role="img" aria-label="Flag right"></div>
+
+      <div class="heading">
+        <span class="title">Pakistan • 14 August</span>
+      </div>
+
+      <div class="crest" aria-hidden="true"></div>
+
+      <h1 class="multi" aria-live="polite">
+        <span class="line">Happy Independence Day</span>
+        <span class="line">یومِ آزادی مبارک</span>
+        <span class="line">عيدُ الاستقلال سعيد</span>
+        <span class="line">独立日快乐</span>
+      </h1>
+      <p class="sub">Grand • Elegant • Powerful</p>
+    </section>
+  </main>
+  <!-- Audio (replace src with a royalty‑free or public‑domain rendition) -->
+  <!-- Audio (public‑domain sources with fallbacks) -->
+  <audio id="anthem" preload="auto" crossorigin="anonymous">
+    <!-- MP3 transcode from Wikimedia Commons (Govt. of Pakistan instrumental) -->
+    <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/9/92/National-Anthem-_instrumental.ogg/National-Anthem-_instrumental.ogg.mp3" type="audio/mpeg">
+    <!-- OGG original (Govt. of Pakistan instrumental) -->
+    <source src="https://upload.wikimedia.org/wikipedia/commons/9/92/National-Anthem-_instrumental.ogg" type="audio/ogg">
+    <!-- U.S. Navy Band instrumental (public domain) as extra fallback (MP3 transcode) -->
+    <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/3/3a/Pakistani_national_anthem_-_United_States_Navy_Band.ogg/Pakistani_national_anthem_-_United_States_Navy_Band.ogg.mp3" type="audio/mpeg">
+    <!-- Local fallback if you download an MP3 into /assets -->
+    <source src="assets/qaumi-tarana.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Start overlay to satisfy browser autoplay rules -->
+  <div class="start" id="start">
+    <div class="card">
+      <h2 style="margin:0 0 8px">Happy Indep=endence Day!</h2>
+      <p style="opacity:.9">Click below to enter with music and animations.</p>
+      <button class="btn" id="enter">Enter • Play Anthem</button>
+      <p style="opacity:.7; font-size:12px; margin-top:10px">Note: Most browsers require a tap/click before audio can start.</p>
+    </div>
+  </div>
+
+  <script>
+  // Utility: Random helper
+  const R = (min, max) => Math.random() * (max - min) + min;
+
+  // Particle sparks
+  (function createSparks(){
+    const wrap = document.getElementById('sparks');
+    for(let i=0;i<80;i++){
+      const s = document.createElement('div'); s.className='spark';
+      s.style.left = R(0,100)+'%';
+      s.style.animationDelay = (-R(0,6))+'s';
+      s.style.animationDuration = R(4,9)+'s';
+      s.style.opacity = R(.2,.9);
+      wrap.appendChild(s);
+    }
+  })();
+
+  // Multi-language animated heading
+  const lines = Array.from(document.querySelectorAll('.multi .line'));
+  let current = -1;
+  function showNext(){
+    const prev = lines[current];
+    current = (current + 1) % lines.length;
+    const el = lines[current];
+    if(prev){
+      prev.animate([
+        {opacity:1, filter:'blur(0px)', transform:'translateY(0) scale(1)'},
+        {opacity:0, filter:'blur(8px)', transform:'translateY(-10px) scale(1.02)'}
+      ], {duration:600, easing:'ease'}).onfinish = ()=>{ prev.style.opacity=0; };
+    }
+    el.style.opacity=1; el.style.filter='blur(0)'; el.style.transform='translateY(0) scale(1)';
+    el.animate([
+      {opacity:0, filter:'blur(12px)', transform:'translateY(14px) scale(.98)'},
+      {opacity:1, filter:'blur(0px)', transform:'translateY(0) scale(1)'}
+    ], {duration:800, easing:'cubic-bezier(.2,.6,.2,1)'});
+  }
+
+  // Fireworks
+  function fireworks(){
+    const c = document.getElementById('fireworks');
+    const ctx = c.getContext('2d');
+    const DPR = Math.max(1, window.devicePixelRatio || 1);
+    function size(){ c.width = innerWidth * DPR; c.height = innerHeight * DPR; }
+    size(); addEventListener('resize', size);
+    let particles = [];
+    function spawn(x, y){
+      const hue = R(100,160); // greenish palette
+      const count = 80;
+      for(let i=0;i<count;i++){
+        const angle = (i / count) * Math.PI * 2;
+        const speed = R(2, 6) * DPR;
+        particles.push({
+          x, y, vx: Math.cos(angle) * speed * R(.6,1.2), vy: Math.sin(angle) * speed * R(.6,1.2),
+          life: R(50,90), alpha: 1, hue: hue + R(-20, 20), size: R(1,2) * DPR
+        });
+      }
+    }
+    let last = 0;
+    function loop(t){
+      requestAnimationFrame(loop);
+      ctx.fillStyle = 'rgba(0,0,0,0.18)';
+      ctx.fillRect(0,0,c.width,c.height);
+      if(t - last > 900){ last = t; spawn(R(0.2,0.8)*c.width, R(0.2,0.5)*c.height); }
+      for(let i=particles.length-1;i>=0;i--){
+        const p = particles[i];
+        p.vy += .02 * DPR; // gravity
+        p.vx *= .992; p.vy *= .992;
+        p.x += p.vx; p.y += p.vy; p.life -= 1; p.alpha = Math.max(0, p.life/90);
+        if(p.life<=0){ particles.splice(i,1); continue; }
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        ctx.fillStyle = `hsl(${p.hue}, 90%, 60%)`;
+        ctx.fill(); ctx.restore();
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+
+  // Confetti
+  function confetti(){
+    const c = document.getElementById('confetti');
+    const ctx = c.getContext('2d');
+    const DPR = Math.max(1, window.devicePixelRatio || 1);
+    function size(){ c.width = innerWidth * DPR; c.height = innerHeight * DPR; }
+    size(); addEventListener('resize', size);
+    const pieces = new Array(220).fill().map(()=>({
+      x: R(0, c.width), y: R(-c.height, 0), w: R(4,10)*DPR, h:R(8,16)*DPR,
+      r: R(0, Math.PI*2), v:R(1,3)*DPR, vr:R(-.05,.05),
+      color: `hsl(${R(100,160)}, ${R(70,100)}%, ${R(45,70)}%)`
+    }));
+    function loop(){
+      requestAnimationFrame(loop);
+      ctx.clearRect(0,0,c.width,c.height);
+      for(const p of pieces){
+        p.y += p.v; p.r += p.vr; if(p.y > c.height) { p.y = -10; p.x = R(0,c.width);}        
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+        ctx.fillStyle = p.color; ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+
+  // Start gate for audio + kick off animations
+  const start = document.getElementById('start');
+  const enter = document.getElementById('enter');
+  const anthem = document.getElementById('anthem');
+  let headlineTimer;
+  function begin(){
+    start.classList.add('hidden');
+    fireworks();
+    confetti();
+    lines.forEach(l=>{ l.style.opacity=0; });
+    showNext(); headlineTimer = setInterval(showNext, 2600);
+    anthem.currentTime = 0; anthem.volume = 0.95; anthem.play().catch(()=>{/* ignore */});
+  }
+  enter.addEventListener('click', begin);
+
+  // Accessibility: keyboard Enter triggers
+  enter.addEventListener('keypress', e=>{ if(e.key==='Enter' || e.key===' '){ begin(); }});
+
+  // In case user interacts anywhere else first
+  window.addEventListener('click', (e)=>{
+    if(!start.classList.contains('hidden')) begin();
+  }, {once:true});
+
+  </script>
+</body>
+</html>
